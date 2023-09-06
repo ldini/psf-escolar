@@ -65,5 +65,54 @@ export class CiudadService {
 
     }
 
+    async update(ciudadDTO : CiudadDTO, id:number) : Promise<String>{
+        try{
+            const criterio : FindOneOptions = { where : {id:id} }
+            let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
+            if(!ciudad)
+                throw new Error('no se pudo encontrar la ciudad a modificar ');
+            else{
+                let ciudadVieja = ciudad.getNombre();
+                ciudad.setNombre(ciudadDTO.nombre);
+                ciudad = await this.ciudadRepository.save(ciudad);
+                return `OK - ${ciudadVieja} --> ${ciudadDTO.nombre}`
+            }
+        }
+        catch(error){
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: 'Error en ciudad - ' + error
+            },HttpStatus.NOT_FOUND)
+        }
+
+    }
+
+    async delete(id:number): Promise<any>{
+        try{
+            const criterio : FindOneOptions = { where : {id:id} }
+            let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
+            if(!ciudad)
+                throw new Error('no se eliminar ciudad ');
+            else{
+                await this.ciudadRepository.remove(ciudad);
+                return { id:id,
+                        message:'se elimino exitosamente'
+                    }
+                }
+        }
+        catch(error){
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: 'Error en ciudad - ' + error
+            },HttpStatus.NOT_FOUND)
+        }
+        
+    }
+
+
+
+
+
+
 
 }
