@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository , FindOneOptions } from 'typeorm';
 import { Ciudad } from './entities/ciudad.entity';
+import { CiudadDTO } from './dto/ciudad.dto';
 
 @Injectable()
 export class CiudadService {
@@ -28,5 +29,41 @@ export class CiudadService {
     async findAllOrm():Promise<Ciudad[]>{
         return await this.ciudadRepository.find();
     }
+
+    async findById(id :number) : Promise<Ciudad> {
+        try{
+            const criterio : FindOneOptions = { where: { id:id} };
+            const ciudad : Ciudad = await this.ciudadRepository.findOne( criterio );
+            if(ciudad)
+                return ciudad
+            else  
+                throw new Error('No se encuentra la ciudad');
+        }
+        catch(error){
+            throw new HttpException({
+                status: HttpStatus.CONFLICT,
+                error: 'Error en ciudad - ' + error
+            },HttpStatus.NOT_FOUND)
+        }
+        
+    }
+
+    async create(ciudadDTO : CiudadDTO) : Promise<boolean>{
+        try{
+            let ciudad : Ciudad = await this.ciudadRepository.save(new Ciudad(ciudadDTO.nombre));
+            if(ciudad)
+               return true;
+           else
+               throw new Error('No se pudo crear la cuidad');
+        }
+        catch(error){
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: 'Error en ciudad - ' + error
+            },HttpStatus.NOT_FOUND)
+        }
+
+    }
+
 
 }
