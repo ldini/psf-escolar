@@ -1,1 +1,46 @@
-export class Profesor {}
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { IsNotEmpty} from "class-validator"; //npm install class-validator
+import { Clase } from "src/clases/entities/clase.entity";
+
+@Entity({name: 'profesor'})
+export class Profesor {
+    @PrimaryGeneratedColumn()
+    id:number;
+
+    @Column()
+    @IsNotEmpty()
+    nombre:string;
+
+    @Column()
+    @IsNotEmpty()
+    apellido:string;
+
+    @OneToMany(()=>Clase,clases=>clases.profesor)
+    clases:Clase[];
+
+    constructor(nombre:string,apellido:string){
+        this.nombre = nombre;
+        this.apellido = apellido;
+    }
+
+    public getId():number{return this.id;}
+
+    public getNombre():string{
+        return this.nombre;
+    }
+
+    public setNombre(nombre:string){
+        this.nombre = nombre;
+    }
+
+    public getApellido():string{
+        return this.apellido
+    }
+
+    public setApellido(apellido:string){
+        this.apellido = apellido
+    }
+}
+
+
+

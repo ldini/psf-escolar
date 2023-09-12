@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Escuela } from "src/escuela/entities/escuela.entity";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity({name:"ciudad"})
@@ -8,11 +9,15 @@ export class Ciudad{
     id:number;
 
     @Column()
-    nombre:string;
+    nombre:string; 
+
+    @OneToMany(()=>Escuela,escuela=>escuela.ciudad)
+    public escuelas:Escuela[];
 
     constructor(nombre:string){
         this.nombre = nombre
     }
+    
     public getId():number{
         return this.id;
     }
@@ -22,4 +27,6 @@ export class Ciudad{
     public setNombre(nombre:string){
         this.nombre = nombre;
     }
+
+
 }

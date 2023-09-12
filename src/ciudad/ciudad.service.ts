@@ -45,7 +45,6 @@ export class CiudadService {
                 error: 'Error en ciudad - ' + error
             },HttpStatus.NOT_FOUND)
         }
-        
     }
 
     async create(ciudadDTO : CiudadDTO) : Promise<boolean>{
@@ -106,11 +105,7 @@ export class CiudadService {
                 error: 'Error en ciudad - ' + error
             },HttpStatus.NOT_FOUND)
         }
-        
     }
-
-
-
 
 
 
