@@ -14,26 +14,24 @@ export class CiudadService {
     private readonly ciudadRepository:Repository<Ciudad>
     ){}
 
-    async findAllRaw():Promise<Ciudad[]>{
+    async findAllRaw():Promise<CiudadDTO[]>{
         this.ciudades = [];
         let datos = await this.ciudadRepository.query("select * from ciudad");
-
         datos.forEach(element => {
             let ciudad : Ciudad = new Ciudad(element['nombre']);
             this.ciudades.push(ciudad)
         });
-
         return this.ciudades;
     }
 
-    async findAllOrm():Promise<Ciudad[]>{
+    async findAllOrm():Promise<CiudadDTO[]>{
         return await this.ciudadRepository.find();
     }
 
-    async findById(id :number) : Promise<Ciudad> {
+    async findById(id :number) : Promise<CiudadDTO> {
         try{
             const criterio : FindOneOptions = { where: { id:id} };
-            const ciudad : Ciudad = await this.ciudadRepository.findOne( criterio );
+            const ciudad : CiudadDTO = await this.ciudadRepository.findOne( criterio );
             if(ciudad)
                 return ciudad
             else  
@@ -64,15 +62,45 @@ export class CiudadService {
 
     }
 
+
+    // {
+    //     id:1
+    //     nombre:null
+    // }
+
+    // {
+    //     id:1
+    // }
+
+
+
+
     async update(ciudadDTO : CiudadDTO, id:number) : Promise<String>{
         try{
             const criterio : FindOneOptions = { where : {id:id} }
             let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
+
+            // ciudad= { 
+            //     id:1
+            //     nombre:"Tandil"
+            //     habitantes:166
+            // }
+
             if(!ciudad)
                 throw new Error('no se pudo encontrar la ciudad a modificar ');
             else{
                 let ciudadVieja = ciudad.getNombre();
-                ciudad.setNombre(ciudadDTO.nombre);
+
+                // ciudadVieja = Tandil
+                if(ciudadDTO.nombre != null && ciudadDTO.nombre != undefined)
+                    ciudad.setNombre(ciudadDTO.nombre);
+
+                // // {
+                //     id:1
+                //     nombre:null
+                //     habitantes:12
+                // }
+
                 ciudad = await this.ciudadRepository.save(ciudad);
                 return `OK - ${ciudadVieja} --> ${ciudadDTO.nombre}`
             }
