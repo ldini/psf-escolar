@@ -2,10 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Clase } from './entities/clase.entity';
 import { FindOneOptions, Repository } from 'typeorm';
+import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
+
 
 @Injectable()
 export class ClasesService {
-
 
   constructor(
     @InjectRepository(Clase) 
@@ -22,11 +23,11 @@ export class ClasesService {
   }
 
   async findAll(): Promise<Clase[]> {
-    return await this.claseRepository.find();
+    return await this.claseRepository.find({relations:['estudiantes']});
   }
 
   async findOne(id: number) {
-    const criterio : FindOneOptions = {where:{id:id}}
+    const criterio : FindOneOptions = {where:{id:id} , relations:['estudiantes']}
     let clase : Clase = await this.claseRepository.findOne(criterio);
     if(clase)
       return clase;
