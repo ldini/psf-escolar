@@ -1,5 +1,6 @@
 import { Clase } from "src/clases/entities/clase.entity";
-import { Column, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { EstudianteClase } from "./estudiante_clase.entity";
 
 @Entity({name:'estudiantes'})
 export class Estudiante {
@@ -16,9 +17,11 @@ export class Estudiante {
     @Column()
     fecha_nacimiento:Date;
 
-    @ManyToMany(()=>Clase,clases=>clases.estudiantes)
-    clases:Clase[];
+    // @ManyToMany(()=>Clase,clases=>clases.estudiantes)
+    // clases:Clase[];
 
+    @OneToMany(()=>EstudianteClase,estudianteclases=>estudianteclases.estudiante)
+    estudianteClases:EstudianteClase[];
 
     constructor(nombre:string,apellido:string,fecha:Date){
         this.nombre = nombre;

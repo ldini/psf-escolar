@@ -7,14 +7,14 @@ import { EstudianteDto } from './dto/create-estudiante.dto';
 export class EstudianteController {
   constructor(private readonly estudianteService: EstudianteService) {}
 
-  @Post()
+  @Post('')
   async create(@Body() estudianteDto: EstudianteDto) {
     return await this.estudianteService.create(estudianteDto);
   }
 
-  @Post('con_relacion')
-  async createConRelacion(@Body() estudianteDto:EstudianteDto):Promise<boolean>{
-    return await this.estudianteService.createConRelacion(estudianteDto);
+  @Post('agregar-clase')
+  async addClase(@Body() body:any):Promise<any>{
+    return await this.estudianteService.addClase(body);
   }
 
   @Get()
