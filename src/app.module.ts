@@ -7,6 +7,7 @@ import { ProfesorModule } from './profesor/profesor.module';
 import { EscuelaModule } from './escuela/escuela.module';
 import { ClasesModule } from './clases/clases.module';
 import { EstudianteModule } from './estudiante/estudiante.module';
+import { AsistenciaModule } from './asistencia/asistencia.module';
 
 
 @Module({
@@ -26,6 +27,7 @@ import { EstudianteModule } from './estudiante/estudiante.module';
   EscuelaModule,
   ClasesModule,
   EstudianteModule,
+  AsistenciaModule,
 
 ],
   
